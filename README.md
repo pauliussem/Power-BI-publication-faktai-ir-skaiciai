@@ -1,115 +1,92 @@
-# Power-BI-publication-faktai-ir-skaiciai
-
-
-
-
-Publication "Faktai ir skaičiai" is published one time per year. It consists of different statistics from different departments.
-
-I had to prepare statistics about provided applications and declared area of crops to get EU support.
+## Declared area of crops in 2015-2024
 
 ## Steps followed
 
 ### Data preparation
-Prepared data array for all dashboards. Had to extract 2 different arrays. First for general data about provided applications and declared area and second for data about provided applications and declared area grouped by plant code.
-
-Also prepared TopoJSON file which will be used in a Shape map later.
-
-### Step 1:
-Since we have tables about declarations for each year since 2020, which are freezed immediately after declaration period and I also wanted to use plant code ID instead of plant code, had to write a script to extract information from main table and apply date restrictions for each year, depending when declaration period has ended.
-
-###(Paveiksliukas 1)
-
-Had to link 5 different tables to provide information about declared applications and declared area restricted to document type. And since main table doesn‘t provide information about municipalities, had to use domicile id from documents table and 2 other tables to provide municipalities names.
-
-### Step 2: 
-Extracted information for each year and saved to folder as csv files.
-
-###(Paveiksliukas 2)
-
-### Step 3:
-
-Since we use names and ID’s from “Registru centras”, took excel file from https://www.registrucentras.lt/ with information about municipalities, IDs, coordinates and etc.
-
-### TopoJSON file preparation.
 
 ### Step 1: 
-Took GeoJSON file from https://www.registrucentras.lt/. 
+
+Load data into Power BI Desktop, dataset is folder “Year” with .csv files for each year.
 
 ### Step 2: 
-Imported file to https://mapshaper.org/.
+
+Load data into Power BI Desktop, dataset is excel file plants classifier.
 
 ### Step 3: 
-After conversion to TopoJSON, power BI couldn’t read the file, so had to change EPSG code (coordinates system) from 3346 to 4326. 
 
-###Paveiksliukas 3.
+Removed 13 unnecessary columns from table ‘Deklaruotos naudmenos’, source.name, municipalities and information about provided applications and declared area of other groups, except general number of declared area.
 
-Map became a bit leaned in mapshaper, however power BI read it as it suppose to be.
+### Step 4: 
 
-###Paveiksliukas 4.
+Created my own table about plant groups and assign ID for each group.
 
-Map became a bit leaned in mapshaper, however power BI read it as it suppose to be.
+	DAX was written:
+    Naudmenu grupes = {("Žieminiai kviečiai", 1),("Žieminiai rugiai", 2),
+    ("Žieminiai kvietrugiai", 3), ("Žieminiai miežiai", 4), ("Vasariniai kviečiai", 5),
+    ("Vasariniai (salykliniai) miežiai", 6), ("Vasariniai kvietrugiai", 7), ("Vasariniai rugiai", 8),
+    ("Avižos", 9), ("Grikiai", 10), ("Kukurūzai", 11), ("Žirniai", 12), ("Pupos", 13),
+    ("Vikiai (ir jų mišiniai)", 14),("Lubinai", 15), ("Žieminiai rapsai", 16),
+    ("Vasariniai rapsai", 17), ("Cukriniai runkeliai", 18), ("Kanapės", 19), ("Linai", 20),
+    ("Bulvės", 21), ("Daržovės", 22), ("Sodai ir uogynai", 23)}
+### Step 5: 
 
-### Insights:
+Extracted relevant information from table ‘Deklaruotos naudmenos’  and created new table ‘Deklaruotos naudmenos pagal grupes’.
 
-14 dashboards were. Wrote DAXs to filter relevant data, to change number format, to relate choropleth maps with legends and etc.
+	DAX was written:
+    Deklaruotos naudmenos pagal grupes = CALCULATETABLE('Deklaruotos naudmenos', 'Paselius klasifikatorius'[ID] IN  
+    {444, 590, 591, 592, 593, 594, 596, 597, 598, 599, 601, 602, 603, 605, 606, 607, 608, 609, 610, 611, 617, 622, 627, 628, 
+    630, 631, 636, 637, 639, 641, 643, 644, 646, 649, 650, 651, 652, 654, 698, 700, 714, 715, 717, 737, 738, 771, 409, 402,
+    403, 404,405,406, 407, 662,408,410,411,412,413,414,415,665, 434,425, 426,447, 695, 	743,449,450,452, 453,600, 632,633,
+    668, 669, 670, 671, 672, 673, 674, 675, 676, 677, 463, 464, 465, 466, 678, 679, 469, 470, 471, 472, 680, 681, 682, 683,
+    684, 685, 616, 619, 620, 621, 624, 635, 653, 716, 722, 728, 739, 740, 746, 778, 779})
 
-.pbix files are provided into branches of this repository. Not all files are provided, since creation steps are pretty similar.
+### Step 6: 
 
-### Links to all works:
+Created new column with assigned number for each group, depending on plant ID.
 
-1.	Provided applications and declared area change:
+	DAX was written:
+    Grupės = SWITCH(TRUE(), 'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN {444, 	590, 591, 592, 593, 594, 596, 597,
+    598, 599, 601, 602, 603, 605, 606, 607, 608, 609, 610, 611, 617, 622, 627, 628, 630, 631, 636, 637, 639, 641, 643, 644,
+    646, 649, 650, 651, 	652, 654, 698, 700, 714, 715, 717, 737, 738, 771}, 22, 'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN {409},
+    1, 'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN {402}, 9, 'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN {403},
+    10, 'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN {404}, 7, 'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN {405},
+    3, 'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN {406, 407, 662}, 11, 'Deklaruotos 	naudmenos pagal grupes'[KULTUROS_ID] IN {408},
+    5, 'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN {410}, 6, 'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN {411}, 4,
+    'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN 	{412}, 17,'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN {413}, 16,
+    'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN {414}, 8,'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN {415}, 2,
+    'Deklaruotos naudmenos pagal 	grupes'[KULTUROS_ID] IN {665, 434}, 19, 'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN {425, 426}, 21,
+    'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN {447, 695, 743}, 13, 'Deklaruotos naudmenos pagal 	grupes'[KULTUROS_ID] IN {449}, 14,
+    'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN {450}, 12, 'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN 	{452, 453}, 15,
+    'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN {600, 632}, 18, 'Deklaruotos naudmenos pagal grupes'[KULTUROS_ID] IN {633}, 20,
+    'Deklaruotos 	naudmenos pagal grupes'[KULTUROS_ID] IN {668, 669, 670, 671, 672, 673, 674, 675, 676, 677, 463, 464, 465,
+    466, 678, 679, 469, 470, 471, 472, 680, 681, 682, 683, 684, 685, 	616, 619, 620, 621, 624, 635, 653, 716, 722, 728, 739,
+    740, 746, 778, 779}, 23, 0)
 
-https://app.powerbi.com/view?r=eyJrIjoiNjdiZjUwNmEtODc1NC00NmY0LThkZDEtMDA0MDczOGI0Mzg0IiwidCI6IjNjMjk2MzFmLTAyN2EtNGFlYy05OGQxLWJlMGNjODg4MzAxNiIsImMiOjl9
+### Step 7: 
 
-2.	Arable land and permanent pastures-grasslands declared area change:
+Made relationship between tables ‘Deklaruotos naudmenos pagal grupes’ and ‘Naudmenu grupes’.
 
-https://app.powerbi.com/view?r=eyJrIjoiZjUyNTJiYWYtMTgyZi00OTc3LTliZmQtNWI0Nzc3OGRiNDI3IiwidCI6IjNjMjk2MzFmLTAyN2EtNGFlYy05OGQxLWJlMGNjODg4MzAxNiIsImMiOjl9
 
-3.	Arable land declared area change by municipalities (choropleth map):
+### Data visualization
 
-https://app.powerbi.com/view?r=eyJrIjoiNWYyYWUzOGEtYmFhNy00OTQyLThkNTYtNzliMjE2N2NiNjc0IiwidCI6IjNjMjk2MzFmLTAyN2EtNGFlYy05OGQxLWJlMGNjODg4MzAxNiIsImMiOjl9
+### Step 1: 
 
-4.	Permanent pastures-grasslands declared area change by municipalities (choropleth map):
+Took matrix chart to visualize declared area of each group from 2015 to 2024.
 
-https://app.powerbi.com/view?r=eyJrIjoiN2I2NDRhOTYtZDIwNi00ZjhiLWFiZTgtZmYwMzg3ZTE3ZjZkIiwidCI6IjNjMjk2MzFmLTAyN2EtNGFlYy05OGQxLWJlMGNjODg4MzAxNiIsImMiOjl9
+### Step 2:
 
-5.	Distribution of declared area of different areas and crop groups:
+Set font to arial, set background for headers, removed horizontal gridlines, set background for alternate value color.
 
-https://app.powerbi.com/view?r=eyJrIjoiYzVmODYyZDEtNmFiOS00ZTQ1LWI5OWQtYzNkYTIwM2EyNjAxIiwidCI6IjNjMjk2MzFmLTAyN2EtNGFlYy05OGQxLWJlMGNjODg4MzAxNiIsImMiOjl9
+### Step 3: 
 
-6. Declared crops area and change compared to 2023 (yoy):
+Set custom format to ### ### ##0.00 with information about declared area.
 
-https://app.powerbi.com/view?r=eyJrIjoiMmI3ZjA5YjUtMGUzNi00MDc0LWEyN2YtZjAyYmY3NzU0YzkzIiwidCI6IjNjMjk2MzFmLTAyN2EtNGFlYy05OGQxLWJlMGNjODg4MzAxNiIsImMiOjl9
+### Step 4: 
 
-7.	Provided applications and declared area of support action "Kraštovaizdžio elementų priežiūra":
+Created slicer with years in case end-user would like to compare different years easier.
 
-https://app.powerbi.com/view?r=eyJrIjoiYjNhMmY1ZmUtOGZiMy00ZmUwLWI0ZjMtNmRmY2M3NGRkN2ZjIiwidCI6IjNjMjk2MzFmLTAyN2EtNGFlYy05OGQxLWJlMGNjODg4MzAxNiIsImMiOjl9
+## Insights
 
-8.	Provided applications and declared area of support action "Ekologinės sistemos":
-
-https://app.powerbi.com/view?r=eyJrIjoiMDUxNDAxNzktMmI5Yy00MTk2LWI5ZGEtODU4ODI4YzlmMzAzIiwidCI6IjNjMjk2MzFmLTAyN2EtNGFlYy05OGQxLWJlMGNjODg4MzAxNiIsImMiOjl9
-
-9.	Provided applications and declared area of support action "Veiklos ariamojoje žemėje":
-
-https://app.powerbi.com/view?r=eyJrIjoiNWE4YWYzYjUtZDhjMy00NjkwLTlkODctNGZjODNlZTY2ZWMzIiwidCI6IjNjMjk2MzFmLTAyN2EtNGFlYy05OGQxLWJlMGNjODg4MzAxNiIsImMiOjl9
-
-10.	 Provided applications and declared area of support action "KPP 2014–2020 m. ir SP 2023–2027 m.":
-
-https://app.powerbi.com/view?r=eyJrIjoiNDc1MzE0MDMtZTRlMy00MjFkLTliMDAtYWNiZGI0ZDhlYmEwIiwidCI6IjNjMjk2MzFmLTAyN2EtNGFlYy05OGQxLWJlMGNjODg4MzAxNiIsImMiOjl9
-
-11.	 Declared area of crops in 2015-2024:
-
-https://app.powerbi.com/view?r=eyJrIjoiNDUzNGYyZDUtODFmZC00MTg4LWEzY2ItNDQ5MGFiOTljOWNlIiwidCI6IjNjMjk2MzFmLTAyN2EtNGFlYy05OGQxLWJlMGNjODg4MzAxNiIsImMiOjl9
-
-12.	 Change in winter cereals declared area in 2023–2024 (choropleth map):
-
-https://app.powerbi.com/view?r=eyJrIjoiYWQ1YjQ3ZGMtOGQxNi00MGI1LTliMzAtZjhkY2YwYTY2NzliIiwidCI6IjNjMjk2MzFmLTAyN2EtNGFlYy05OGQxLWJlMGNjODg4MzAxNiIsImMiOjl9
-
-13. Change in spring cereals declared area in 2023-2024 (choropleth map):
-
-https://app.powerbi.com/view?r=eyJrIjoiN2ViN2ZkN2ItZDg0Ni00YzE1LTkyOTktZTg1MjliMWMxYjJjIiwidCI6IjNjMjk2MzFmLTAyN2EtNGFlYy05OGQxLWJlMGNjODg4MzAxNiIsImMiOjl9
-
-14. Change in spring and winter rapeseed declared area in 2023-2024 (choropleth map):
-
-https://app.powerbi.com/view?r=eyJrIjoiZGE2MWY3NzctZTBlMy00NWQxLWJkZmYtYzI4Yjg4ZTI3YzM2IiwidCI6IjNjMjk2MzFmLTAyN2EtNGFlYy05OGQxLWJlMGNjODg4MzAxNiIsImMiOjl9
-
+### 1 page report was created. 
+### Report was moved to Power BI service and published to web so I could use iFrame in visme environment. 
+### It visualizes 10 years statistics about declared area of each group of plants. 
