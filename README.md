@@ -33,7 +33,7 @@ According to plant code, picked plant ID’s from year 2023 and 2024 from databa
     =A2&", " (for all IDs in a column) 
     =CONCAT(B2:B17) 
 
-### Paveiksliukas 1
+![6_1](https://github.com/user-attachments/assets/51bf75a2-718c-45a9-8661-4cda724b4354)
 
 ### Step 6: 
 
@@ -91,7 +91,8 @@ For X-axis imported information about declared area and measure [placeholder].
 
 Set data labels on. Applied settings to [placeholder]. Turned off values and in detail > data field added names of plants from ‘Atrinktas paseliu kl’[PAVADINIMAS].
 
-### Paveiksliukas 2
+![6_2](https://github.com/user-attachments/assets/d0b897e6-0a5f-4b07-820d-17266fafb997)
+
 
 ### Step 4: 
 
@@ -105,7 +106,8 @@ Other chart was for declared area change. Picked measure [Yoy augimas].
 
 Set range, conditional bar color. Green -> growth, red > decrease. Turned on data labels and set conditional detail label colors.
 
-### Paveiksliukas 3
+![6_3](https://github.com/user-attachments/assets/4856f1cc-a4ed-4b6d-bb35-25e5eaa0b1c8)
+
 
 ## Insights
 
