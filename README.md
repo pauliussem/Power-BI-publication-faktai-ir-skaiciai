@@ -1,4 +1,5 @@
-## Change in arable land declared area by municipalities (choropleth map):
+## Change in arable land declared area by municipalities (choropleth map)
+
 ### NOTE: Since similar steps were applied for all 5 maps information provided only about this map.
 
 ## Steps followed
@@ -74,7 +75,8 @@ Since regular number formatting doesn’t work as I would expect with minus valu
 
 Since I didn’t wanted a difference between first two cards of SUM values and card with difference value if end-user is watching this dashboard from different region, changed format of [SUM ariamoji zeme 2023] and [SUM ariamoji zeme 2023].
 
-### Paveiksliukas 1
+![3_1](https://github.com/user-attachments/assets/0c574b50-0bfd-4eba-b271-c70e0b8112b8)
+
 
 	DAXs were written:
     2023 SUM F = IF([SUM ariamoji zeme 2023] > 0,
@@ -93,7 +95,7 @@ Since I didn’t wanted a difference between first two cards of SUM values and c
 
 Since in shape map I couldn’t use measure as color saturation, had to find a way to find difference between each municipality. Created matrix with SUM values of declared area for 2023 and 2024 and exported data.
 
-### Paveiksliukas 2
+![3_2](https://github.com/user-attachments/assets/0fd26fe3-d81f-48c7-a4da-203ccfba3c1d)
 
 ### Step 13: 
 
@@ -132,13 +134,16 @@ Created column in table ‘Ariamoji pokytis’ regarding difference of declared 
 ### Step 17:  
 
 Made relationships between all tables.
-### Paveiksliukas 3
+
+![3_3](https://github.com/user-attachments/assets/8e440a04-793e-4789-94db-36536a39b5f6)
+
 
 ### Step 18:  
 
 Wrote a DAX, so in card would appear “Selected municipalities” in case if two or more municipalities are selected.
 
-### Paveiksliukas 4
+![3_4](https://github.com/user-attachments/assets/73a07e53-c523-429a-b1af-52b660fc5a55)
+
 
     DAX was written:
     Visos savivaldybes = IF(HASONEVALUE('Savivaldybiu ID'[SAV_PAVADINIMAS]),SELECTEDVALUE('Savivaldybiu ID'[SAV_PAVADINIMAS]),"Pasirinktose savivaldybėse")
@@ -161,7 +166,8 @@ For color saturation took change of declared area from table ‘Ariamoji pokytis
 
 Took min and max values, divided from 5 and counted 5 equal parts and set minimum and maximum values and set gradient colors.
 
-### Paveiksliukas 5
+![3_5](https://github.com/user-attachments/assets/2ff9d5db-bf68-4183-b421-7dce15382eba)
+
 
 
 ### Step 5: 
@@ -176,7 +182,7 @@ With conditional formatting set gradient colors of color column same as in shape
 
 Since these tables were related from the past, by pressing any section you can filter municipalities, which belongs to assigned section.
 
-### Paveiksliukas 6
+![3_6](https://github.com/user-attachments/assets/c8ec2112-e236-46ac-9a44-e75f16e9ccd1)
 
 
 ### Step 8: 
