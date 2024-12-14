@@ -1,4 +1,4 @@
-## Change in arable land and permanent pastures-grasslands declared area:
+## Change in arable land and permanent pastures-grasslands declared area
 
 ## Steps followed
 
