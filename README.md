@@ -41,7 +41,7 @@ Wrote DAXs to calculate declared area part in % for both groups.
 
 Made relationships between tables.
 
-### Paveikslelis 1
+![5_1](https://github.com/user-attachments/assets/536a80ba-8e99-4474-ab3e-dfa81686afc1)
 
 
 ### Data visualization
