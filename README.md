@@ -19,14 +19,15 @@ Prepared TopoJSON file which will be used in a Shape map later.
 ### Step 1:
 Since we have tables about declarations for each year since 2020, which are freezed immediately after declaration period and I also wanted to use plant code ID instead of plant code, had to write a script to extract information from main table and apply date restrictions for each year, depending when declaration period has ended.
 
-### (Paveiksliukas 1)
+![Picture1](https://github.com/user-attachments/assets/4015f897-f229-45b5-9fa7-c96989117f5a)
+
 
 Had to link 5 different tables to provide information about declared applications and declared area restricted to document type. And since main table doesn‘t provide information about municipalities, had to use domicile id from documents table and 2 other tables to provide municipalities names.
 
 ### Step 2: 
 Extracted information for each year and saved to folder as csv files.
 
-### (Paveiksliukas 2)
+![Picture2](https://github.com/user-attachments/assets/cf37a460-8f43-490f-929c-d00e21fea00b)
 
 ### Step 3:
 
@@ -43,11 +44,11 @@ Imported file to https://mapshaper.org/.
 ### Step 3: 
 After conversion to TopoJSON, power BI couldn’t read the file, so had to change EPSG code (coordinates system) from 3346 to 4326. 
 
-### Paveiksliukas 3.
+![Picture3](https://github.com/user-attachments/assets/4aba18c9-eadd-47b7-9912-61929cdd8748)
 
 Map became a bit leaned in mapshaper, however power BI read it as it suppose to be.
 
-### Paveiksliukas 4.
+![Picture4](https://github.com/user-attachments/assets/e20161f9-e8a9-4db2-bb09-a5475041deb5)
 
 Map became a bit leaned in mapshaper, however power BI read it as it suppose to be.
 
